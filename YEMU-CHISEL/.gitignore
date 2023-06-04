@@ -1,7 +1,7 @@
 obj_dir
 *.fir
 *.v 
-tag
+tags
 *.json
 target
 project
