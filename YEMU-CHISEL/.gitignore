@@ -1,0 +1,6 @@
+obj_dir
+*.fir
+*.v 
+tag
+*.json
+target

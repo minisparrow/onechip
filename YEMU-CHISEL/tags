@@ -1,0 +1,110 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+M	YEMU.v	/^  reg [31:0] M [0:255]; \/\/ @[YEMU.scala 8:15]$/;"	r
+M_MPORT_addr	YEMU.v	/^  wire [7:0] M_MPORT_addr; \/\/ @[YEMU.scala 8:15]$/;"	n
+M_MPORT_data	YEMU.v	/^  wire [31:0] M_MPORT_data; \/\/ @[YEMU.scala 8:15]$/;"	n
+PC	YEMU.v	/^  reg [63:0] PC; \/\/ @[YEMU.scala 7:19]$/;"	r
+PERL	obj_dir/VYEMU.mk	/^PERL = perl$/;"	m
+R	YEMU.v	/^  reg [63:0] R [0:31]; \/\/ @[YEMU.scala 6:15]$/;"	r
+RANDOM	YEMU.v	/^`define RANDOM $random$/;"	c
+RANDOMIZE	YEMU.v	/^`define RANDOMIZE$/;"	c
+R_MPORT_1_addr	YEMU.v	/^  wire [4:0] R_MPORT_1_addr; \/\/ @[YEMU.scala 6:15]$/;"	n
+R_MPORT_1_data	YEMU.v	/^  wire [63:0] R_MPORT_1_data; \/\/ @[YEMU.scala 6:15]$/;"	n
+R_MPORT_2_addr	YEMU.v	/^  wire [4:0] R_MPORT_2_addr; \/\/ @[YEMU.scala 6:15]$/;"	n
+R_MPORT_2_data	YEMU.v	/^  wire [63:0] R_MPORT_2_data; \/\/ @[YEMU.scala 6:15]$/;"	n
+R_MPORT_3_addr	YEMU.v	/^  wire [4:0] R_MPORT_3_addr; \/\/ @[YEMU.scala 6:15]$/;"	n
+R_MPORT_3_data	YEMU.v	/^  wire [63:0] R_MPORT_3_data; \/\/ @[YEMU.scala 6:15]$/;"	n
+R_MPORT_3_en	YEMU.v	/^  wire  R_MPORT_3_en; \/\/ @[YEMU.scala 6:15]$/;"	n
+R_MPORT_3_mask	YEMU.v	/^  wire  R_MPORT_3_mask; \/\/ @[YEMU.scala 6:15]$/;"	n
+SYSTEMC_INCLUDE	obj_dir/VYEMU.mk	/^SYSTEMC_INCLUDE ?= $/;"	m
+SYSTEMC_LIBDIR	obj_dir/VYEMU.mk	/^SYSTEMC_LIBDIR ?= $/;"	m
+VERILATED_VYEMU_H_	obj_dir/VYEMU.h	9;"	d
+VERILATED_VYEMU__SYMS_H_	obj_dir/VYEMU__Syms.h	8;"	d
+VERILATED_VYEMU___024ROOT_H_	obj_dir/VYEMU___024root.h	6;"	d
+VERILATOR_ROOT	obj_dir/VYEMU.mk	/^VERILATOR_ROOT = \/usr\/local\/share\/verilator$/;"	m
+VM_C11	obj_dir/VYEMU_classes.mk	/^VM_C11 = 1$/;"	m
+VM_COVERAGE	obj_dir/VYEMU_classes.mk	/^VM_COVERAGE = 0$/;"	m
+VM_MODPREFIX	obj_dir/VYEMU.mk	/^VM_MODPREFIX = VYEMU$/;"	m
+VM_PARALLEL_BUILDS	obj_dir/VYEMU_classes.mk	/^VM_PARALLEL_BUILDS = 0$/;"	m
+VM_PCLI	obj_dir/VYEMU.mk	/^VM_PCLI = 1$/;"	m
+VM_PREFIX	obj_dir/VYEMU.mk	/^VM_PREFIX = VYEMU$/;"	m
+VM_PROFC	obj_dir/VYEMU.mk	/^VM_PROFC = 0$/;"	m
+VM_SC	obj_dir/VYEMU.mk	/^VM_SC = 0$/;"	m
+VM_SC_TARGET_ARCH	obj_dir/VYEMU.mk	/^VM_SC_TARGET_ARCH = linux$/;"	m
+VM_SP_OR_SC	obj_dir/VYEMU.mk	/^VM_SP_OR_SC = $(VM_SC)$/;"	m
+VM_TIMING	obj_dir/VYEMU_classes.mk	/^VM_TIMING = 0$/;"	m
+VM_TRACE	obj_dir/VYEMU_classes.mk	/^VM_TRACE = 0$/;"	m
+VM_TRACE_FST	obj_dir/VYEMU_classes.mk	/^VM_TRACE_FST = 0$/;"	m
+VM_TRACE_VCD	obj_dir/VYEMU_classes.mk	/^VM_TRACE_VCD = 0$/;"	m
+VM_USER_CFLAGS	obj_dir/VYEMU.mk	/^VM_USER_CFLAGS = \\$/;"	m
+VM_USER_CLASSES	obj_dir/VYEMU.mk	/^VM_USER_CLASSES = \\$/;"	m
+VM_USER_DIR	obj_dir/VYEMU.mk	/^VM_USER_DIR = \\$/;"	m
+VM_USER_LDLIBS	obj_dir/VYEMU.mk	/^VM_USER_LDLIBS = \\$/;"	m
+VYEMU	obj_dir/VYEMU.cpp	/^VYEMU::VYEMU(VerilatedContext* _vcontextp__, const char* _vcname__)$/;"	f	class:VYEMU
+VYEMU	obj_dir/VYEMU.cpp	/^VYEMU::VYEMU(const char* _vcname__)$/;"	f	class:VYEMU
+VYEMU__Syms	obj_dir/VYEMU__Syms.cpp	/^VYEMU__Syms::VYEMU__Syms(VerilatedContext* contextp, const char* namep, VYEMU* modelp)$/;"	f	class:VYEMU__Syms
+VYEMU___024root	obj_dir/VYEMU___024root__Slow.cpp	/^VYEMU___024root::VYEMU___024root(VYEMU__Syms* symsp, const char* v__name)$/;"	f	class:VYEMU___024root
+VYEMU___024root___ctor_var_reset	obj_dir/VYEMU___024root__DepSet_h4a6967c4__0__Slow.cpp	/^VL_ATTR_COLD void VYEMU___024root___ctor_var_reset(VYEMU___024root* vlSelf) {$/;"	f
+VYEMU___024root___dump_triggers__act	obj_dir/VYEMU___024root__DepSet_h4a6967c4__0__Slow.cpp	/^VL_ATTR_COLD void VYEMU___024root___dump_triggers__act(VYEMU___024root* vlSelf) {$/;"	f
+VYEMU___024root___dump_triggers__nba	obj_dir/VYEMU___024root__DepSet_h4a6967c4__0__Slow.cpp	/^VL_ATTR_COLD void VYEMU___024root___dump_triggers__nba(VYEMU___024root* vlSelf) {$/;"	f
+VYEMU___024root___dump_triggers__stl	obj_dir/VYEMU___024root__DepSet_h4a6967c4__0__Slow.cpp	/^VL_ATTR_COLD void VYEMU___024root___dump_triggers__stl(VYEMU___024root* vlSelf) {$/;"	f
+VYEMU___024root___eval	obj_dir/VYEMU___024root__DepSet_h4a6967c4__0.cpp	/^void VYEMU___024root___eval(VYEMU___024root* vlSelf) {$/;"	f
+VYEMU___024root___eval_act	obj_dir/VYEMU___024root__DepSet_h4a6967c4__0.cpp	/^void VYEMU___024root___eval_act(VYEMU___024root* vlSelf) {$/;"	f
+VYEMU___024root___eval_debug_assertions	obj_dir/VYEMU___024root__DepSet_h4a6967c4__0.cpp	/^void VYEMU___024root___eval_debug_assertions(VYEMU___024root* vlSelf) {$/;"	f
+VYEMU___024root___eval_final	obj_dir/VYEMU___024root__DepSet_h4a6967c4__0__Slow.cpp	/^VL_ATTR_COLD void VYEMU___024root___eval_final(VYEMU___024root* vlSelf) {$/;"	f
+VYEMU___024root___eval_initial	obj_dir/VYEMU___024root__DepSet_h4a6967c4__0__Slow.cpp	/^VL_ATTR_COLD void VYEMU___024root___eval_initial(VYEMU___024root* vlSelf) {$/;"	f
+VYEMU___024root___eval_nba	obj_dir/VYEMU___024root__DepSet_h4a6967c4__0.cpp	/^void VYEMU___024root___eval_nba(VYEMU___024root* vlSelf) {$/;"	f
+VYEMU___024root___eval_settle	obj_dir/VYEMU___024root__DepSet_h4a6967c4__0__Slow.cpp	/^VL_ATTR_COLD void VYEMU___024root___eval_settle(VYEMU___024root* vlSelf) {$/;"	f
+VYEMU___024root___eval_static	obj_dir/VYEMU___024root__DepSet_h4a6967c4__0__Slow.cpp	/^VL_ATTR_COLD void VYEMU___024root___eval_static(VYEMU___024root* vlSelf) {$/;"	f
+VYEMU___024root___eval_stl	obj_dir/VYEMU___024root__DepSet_h4a6967c4__0__Slow.cpp	/^VL_ATTR_COLD void VYEMU___024root___eval_stl(VYEMU___024root* vlSelf) {$/;"	f
+VYEMU___024root___eval_triggers__act	obj_dir/VYEMU___024root__DepSet_hcdcd5261__0.cpp	/^void VYEMU___024root___eval_triggers__act(VYEMU___024root* vlSelf) {$/;"	f
+VYEMU___024root___eval_triggers__stl	obj_dir/VYEMU___024root__DepSet_hcdcd5261__0__Slow.cpp	/^VL_ATTR_COLD void VYEMU___024root___eval_triggers__stl(VYEMU___024root* vlSelf) {$/;"	f
+VYEMU___024root___nba_sequent__TOP__0	obj_dir/VYEMU___024root__DepSet_hcdcd5261__0.cpp	/^VL_INLINE_OPT void VYEMU___024root___nba_sequent__TOP__0(VYEMU___024root* vlSelf) {$/;"	f
+VYEMU___024root___stl_sequent__TOP__0	obj_dir/VYEMU___024root__DepSet_h4a6967c4__0__Slow.cpp	/^VL_ATTR_COLD void VYEMU___024root___stl_sequent__TOP__0(VYEMU___024root* vlSelf) {$/;"	f
+YEMU	YEMU.v	/^module YEMU($/;"	m
+_RAND_0	YEMU.v	/^  reg [63:0] _RAND_0;$/;"	r
+_RAND_1	YEMU.v	/^  reg [31:0] _RAND_1;$/;"	r
+_RAND_2	YEMU.v	/^  reg [63:0] _RAND_2;$/;"	r
+_T_15	YEMU.v	/^  wire [4:0] _T_15 = isEbreak ? 5'ha : inst_rs1; \/\/ @[YEMU.scala 25:25]$/;"	n
+_T_17	YEMU.v	/^  wire [4:0] _T_17 = isEbreak ? 5'hb : 5'h0; \/\/ @[YEMU.scala 26:25]$/;"	n
+_T_21	YEMU.v	/^  wire [51:0] _T_21 = inst_imm11_0[11] ? 52'hfffffffffffff : 52'h0; \/\/ @[Bitwise.scala 72:12]$/;"	n
+_T_22	YEMU.v	/^  wire [63:0] _T_22 = {_T_21,inst_imm11_0}; \/\/ @[Cat.scala 30:58]$/;"	n
+_T_33	YEMU.v	/^  wire [63:0] _T_33 = PC + 64'h4; \/\/ @[YEMU.scala 30:12]$/;"	n
+_T_7	YEMU.v	/^  wire  _T_7 = inst_opcode == 7'h13; \/\/ @[YEMU.scala 21:29]$/;"	n
+_T_8	YEMU.v	/^  wire  _T_8 = inst_funct3 == 3'h0; \/\/ @[YEMU.scala 21:63]$/;"	n
+_T_9	YEMU.v	/^  wire [31:0] _T_9 = {inst_imm11_0,inst_rs1,inst_funct3,inst_rd,inst_opcode}; \/\/ @[YEMU.scala 22:23]$/;"	n
+_WIRE	YEMU.v	/^  wire [31:0] _WIRE = M_MPORT_data;$/;"	n
+__Vconfigure	obj_dir/VYEMU___024root__Slow.cpp	/^void VYEMU___024root::__Vconfigure(bool first) {$/;"	f	class:VYEMU___024root
+clock	YEMU.v	/^  input   clock,$/;"	p
+eval_step	obj_dir/VYEMU.cpp	/^void VYEMU::eval_step() {$/;"	f	class:VYEMU
+eventsPending	obj_dir/VYEMU.cpp	/^bool VYEMU::eventsPending() { return false; }$/;"	f	class:VYEMU
+final	obj_dir/VYEMU.cpp	/^VL_ATTR_COLD void VYEMU::final() {$/;"	f	class:VYEMU
+hierName	obj_dir/VYEMU.cpp	/^const char* VYEMU::hierName() const { return vlSymsp->name(); }$/;"	f	class:VYEMU
+initvar	YEMU.v	/^  integer initvar;$/;"	r
+input	YEMU.v	/^  input   reset,$/;"	p
+inst_funct3	YEMU.v	/^  wire [2:0] inst_funct3 = _WIRE[14:12]; \/\/ @[YEMU.scala 20:35]$/;"	n
+inst_imm11_0	YEMU.v	/^  wire [11:0] inst_imm11_0 = _WIRE[31:20]; \/\/ @[YEMU.scala 20:35]$/;"	n
+inst_opcode	YEMU.v	/^  wire [6:0] inst_opcode = _WIRE[6:0]; \/\/ @[YEMU.scala 20:35]$/;"	n
+inst_rd	YEMU.v	/^  wire [4:0] inst_rd = _WIRE[11:7]; \/\/ @[YEMU.scala 20:35]$/;"	n
+inst_rs1	YEMU.v	/^  wire [4:0] inst_rs1 = _WIRE[19:15]; \/\/ @[YEMU.scala 20:35]$/;"	n
+io_halt	YEMU.v	/^  output  io_halt$/;"	p
+isAddi	YEMU.v	/^  wire  isAddi = inst_opcode == 7'h13 & inst_funct3 == 3'h0; \/\/ @[YEMU.scala 21:47]$/;"	n
+isEbreak	YEMU.v	/^  wire  isEbreak = _T_9 == 32'h100073; \/\/ @[YEMU.scala 22:30]$/;"	n
+load_prog	main.cpp	/^void load_prog(const char *bin) {$/;"	f
+main	main.cpp	/^int main(int argc, char *argv[]) {$/;"	f
+modelName	obj_dir/VYEMU.cpp	/^const char* VYEMU::modelName() const { return "VYEMU"; }$/;"	f	class:VYEMU
+name	obj_dir/VYEMU.cpp	/^const char* VYEMU::name() const {$/;"	f	class:VYEMU
+nextTimeSlot	obj_dir/VYEMU.cpp	/^uint64_t VYEMU::nextTimeSlot() {$/;"	f	class:VYEMU
+reset	main.cpp	/^void reset(int n) { top->reset = 1; while (n --) { step();  } top->reset = 0;  }$/;"	f
+rs1Val	YEMU.v	/^  wire [63:0] rs1Val = _T_15 == 5'h0 ? 64'h0 : R_MPORT_1_data; \/\/ @[YEMU.scala 9:29]$/;"	n
+rs2Val	YEMU.v	/^  wire [63:0] rs2Val = _T_17 == 5'h0 ? 64'h0 : R_MPORT_2_data; \/\/ @[YEMU.scala 9:29]$/;"	n
+step	main.cpp	/^void step() { top->clock = 0; top->eval(); top->clock = 1; top->eval();  }$/;"	f
+threads	obj_dir/VYEMU.cpp	/^unsigned VYEMU::threads() const { return 1; }$/;"	f	class:VYEMU
+top	main.cpp	/^static VYEMU *top = NULL;$/;"	v	file:
+~VYEMU	obj_dir/VYEMU.cpp	/^VYEMU::~VYEMU() {$/;"	f	class:VYEMU
+~VYEMU__Syms	obj_dir/VYEMU__Syms.cpp	/^VYEMU__Syms::~VYEMU__Syms()$/;"	f	class:VYEMU__Syms
+~VYEMU___024root	obj_dir/VYEMU___024root__Slow.cpp	/^VYEMU___024root::~VYEMU___024root() {$/;"	f	class:VYEMU___024root
