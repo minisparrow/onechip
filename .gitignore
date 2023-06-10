@@ -1,4 +1,5 @@
 tools
 a.out
 *.bin
+riscv-chisel-book
 
