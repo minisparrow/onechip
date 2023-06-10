@@ -5,3 +5,6 @@ target
 *.json
 *.fir
 obj_dir
+.vscode
+.metals
+.bsp

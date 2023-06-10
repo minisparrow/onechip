@@ -1,0 +1,47 @@
+2023.06.10 22:23:12 INFO  Started: Metals version 0.11.12 in workspace '/mnt/compiler_workspace/onechip/TOYCPU-CHISEL/src' for client Visual Studio Code 1.74.3.[0m
+Jun 10, 2023 10:23:12 PM org.flywaydb.core.internal.license.VersionPrinter printVersionOnly
+INFO: Flyway Community Edition 9.16.3 by Redgate
+Jun 10, 2023 10:23:12 PM org.flywaydb.core.internal.license.VersionPrinter printVersion
+INFO: See release notes here: https://rd.gt/416ObMi
+Jun 10, 2023 10:23:12 PM org.flywaydb.core.internal.license.VersionPrinter printVersion
+INFO: 
+Jun 10, 2023 10:23:12 PM org.flywaydb.core.internal.database.base.BaseDatabaseType createDatabase
+INFO: Database: jdbc:h2:file:/mnt/compiler_workspace/onechip/TOYCPU-CHISEL/src/.metals/metals (H2 2.1)
+Jun 10, 2023 10:23:12 PM org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory allAppliedMigrations
+INFO: Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
+Jun 10, 2023 10:23:12 PM org.flywaydb.core.internal.command.DbValidate validate
+INFO: Successfully validated 4 migrations (execution time 00:00.011s)
+Jun 10, 2023 10:23:12 PM org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory create
+INFO: Creating Schema History table "PUBLIC"."flyway_schema_history" ...
+Jun 10, 2023 10:23:12 PM org.flywaydb.core.internal.command.DbMigrate migrateGroup
+INFO: Current version of schema "PUBLIC": << Empty Schema >>
+Jun 10, 2023 10:23:12 PM org.flywaydb.core.internal.command.DbMigrate doMigrateGroup
+INFO: Migrating schema "PUBLIC" to version "1 - Create tables"
+Jun 10, 2023 10:23:12 PM org.flywaydb.core.internal.command.DbMigrate doMigrateGroup
+INFO: Migrating schema "PUBLIC" to version "2 - Server discovery"
+Jun 10, 2023 10:23:12 PM org.flywaydb.core.internal.command.DbMigrate doMigrateGroup
+INFO: Migrating schema "PUBLIC" to version "3 - Jar symbols"
+Jun 10, 2023 10:23:12 PM org.flywaydb.core.internal.command.DbMigrate doMigrateGroup
+INFO: Migrating schema "PUBLIC" to version "4 - Fingerprints"
+Jun 10, 2023 10:23:12 PM org.flywaydb.core.internal.command.DbMigrate logSummary
+INFO: Successfully applied 4 migrations to schema "PUBLIC", now at version v4 (execution time 00:00.040s)
+2023.06.10 22:23:12 INFO  time: initialize in 0.5s[0m
+2023.06.10 22:23:14 WARN  Build server is not auto-connectable.[0m
+2023.06.10 22:23:14 WARN  no build tool detected in workspace '/mnt/compiler_workspace/onechip/TOYCPU-CHISEL/src'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. [0m
+2023.06.10 22:23:14 WARN  no build target for: /mnt/compiler_workspace/onechip/TOYCPU-CHISEL/src/test/scala/FetchTest.scala[0m
+2023.06.10 22:23:16 INFO  no build target found for /mnt/compiler_workspace/onechip/TOYCPU-CHISEL/src/test/scala/FetchTest.scala. Using presentation compiler with project's scala-library version: 3.2.2[0m
+Jun 10, 2023 10:23:17 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 2
+2023.06.10 22:23:18 INFO  time: code lens generation in 1.17s[0m
+2023.06.10 22:23:20 WARN  no build target for: /mnt/compiler_workspace/onechip/TOYCPU-CHISEL/src/main/scala/02_decode/Memory.scala[0m
+2023.06.10 22:23:41 WARN  no build target for: /mnt/compiler_workspace/onechip/TOYCPU-CHISEL/src/main/scala/02_decode/Top.scala[0m
+2023.06.10 22:23:41 WARN  no build target for: /mnt/compiler_workspace/onechip/TOYCPU-CHISEL/src/main/scala/02_decode/Core.scala[0m
+2023.06.10 22:23:44 WARN  no build target for: /mnt/compiler_workspace/onechip/TOYCPU-CHISEL/src/main/scala/02_decode/Top.scala[0m
+2023.06.10 22:23:45 WARN  no build target for: /mnt/compiler_workspace/onechip/TOYCPU-CHISEL/src/main/scala/02_decode/Core.scala[0m
+2023.06.10 22:23:47 WARN  no build target for: /mnt/compiler_workspace/onechip/TOYCPU-CHISEL/src/main/scala/02_decode/Top.scala[0m
+2023.06.10 22:23:48 WARN  no build target for: /mnt/compiler_workspace/onechip/TOYCPU-CHISEL/src/main/scala/01_fetch/Memory.scala[0m
+2023.06.10 22:23:48 WARN  no build target for: /mnt/compiler_workspace/onechip/TOYCPU-CHISEL/src/main/scala/01_fetch/Top.scala[0m
+2023.06.10 22:24:07 WARN  no build target for: /mnt/compiler_workspace/onechip/TOYCPU-CHISEL/src/main/scala/01_fetch/Top.scala[0m
+2023.06.10 22:27:04 INFO  Shutting down server[0m
+2023.06.10 22:27:04 INFO  shutting down Metals[0m
+2023.06.10 22:27:04 INFO  Exiting server[0m
