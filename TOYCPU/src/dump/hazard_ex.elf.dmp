@@ -1,29 +1,18 @@
 
-br_hazard:     file format elf64-littleriscv
+hazard_ex:     file format elf64-littleriscv
 
 
 Disassembly of section .text.startup:
 
 0000000000000000 <main>:
    0:	00100513          	li	a0,1
-   4:	00200593          	li	a1,2
-   8:	00c000ef          	jal	ra,14 <jump>
-   c:	00200513          	li	a0,2
-  10:	00300593          	li	a1,3
-
-0000000000000014 <jump>:
-  14:	00400593          	li	a1,4
-  18:	00000013          	nop
-  1c:	00000013          	nop
-  20:	00000013          	nop
-  24:	00b50633          	add	a2,a0,a1
-  28:	00000013          	nop
-  2c:	00000013          	nop
-  30:	00000013          	nop
-  34:	00000013          	nop
-  38:	c0001073          	unimp
-  3c:	00000513          	li	a0,0
-  40:	00008067          	ret
+   4:	00a505b3          	add	a1,a0,a0
+   8:	00250613          	addi	a2,a0,2
+   c:	00000013          	nop
+  10:	00000013          	nop
+  14:	c0001073          	unimp
+  18:	00000513          	li	a0,0
+  1c:	00008067          	ret
 
 Disassembly of section .comment:
 

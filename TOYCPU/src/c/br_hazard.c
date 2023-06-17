@@ -11,7 +11,7 @@ int main()
 	asm volatile("addi a1, x0, 3");
 
 	asm volatile("jump:");
-	asm volatile("nop");
+	asm volatile("addi a1, x0, 4");
 	asm volatile("nop");
 	asm volatile("nop");
 	asm volatile("nop");

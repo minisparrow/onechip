@@ -6,7 +6,7 @@ int main()
 	asm volatile("add a1, a0, a0 ");
 
 	// パイプラインを進めるためにBUBBLE
-	asm volatile("nop");
+	asm volatile("add a2, a0, 2");
 	asm volatile("nop");
 	asm volatile("nop");
 

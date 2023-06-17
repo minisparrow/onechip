@@ -93,7 +93,7 @@ class Core extends Module {
   //**********************************
   // Instruction Decode (ID) Stage
 
-  // branch,jump時にIDをBUBBLE化
+  // BUBBLE when branch, jump
   val id_inst = Mux((exe_br_flg || exe_jmp_flg), BUBBLE, id_reg_inst)  
 
   val id_rs1_addr = id_inst(19, 15)

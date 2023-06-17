@@ -78,7 +78,8 @@ class Core extends Module {
 
   val if_pc_plus4 = if_reg_pc + 4.U(WORD_LEN.W)
   val if_pc_next = MuxCase(if_pc_plus4, Seq(
-	  // 優先順位重要！ジャンプ成立とストールが同時発生した場合、ジャンプ処理を優先
+    // 優先順位重要！ジャンプ成立とストールが同時発生した場合、ジャンプ処理を優先
+    // Priority is important! If a jump is established and a stall occurs at the same time, prioritize the jump processing
     exe_br_flg         -> exe_br_target,
     exe_jmp_flg         -> exe_alu_out,
     (if_inst === ECALL) -> csr_regfile(0x305), // go to trap_vector
@@ -91,7 +92,8 @@ class Core extends Module {
   // IF/ID Register
   id_reg_pc   := Mux(stall_flg, id_reg_pc, if_reg_pc)
   id_reg_inst := MuxCase(if_inst, Seq(
-	  // 優先順位重要！ジャンプ成立とストールが同時発生した場合、ジャンプ処理を優先
+	// 優先順位重要！ジャンプ成立とストールが同時発生した場合、ジャンプ処理を優先
+    // Priority is important! If a jump is established and a stall occurs at the same time, prioritize the jump processing
     (exe_br_flg || exe_jmp_flg) -> BUBBLE,
     stall_flg -> id_reg_inst, 
   ))
@@ -101,15 +103,18 @@ class Core extends Module {
   // Instruction Decode (ID) Stage
 
   // stall_flg検出用にアドレスのみ一旦デコード
+  // Temporarily decode only the address for stall_flg detection
   val id_rs1_addr_b = id_reg_inst(19, 15)
   val id_rs2_addr_b = id_reg_inst(24, 20)
 
   // EXとのデータハザード→stall
+  // Data hazard with EX → stall
   val id_rs1_data_hazard = (exe_reg_rf_wen === REN_S) && (id_rs1_addr_b =/= 0.U) && (id_rs1_addr_b === exe_reg_wb_addr)
   val id_rs2_data_hazard = (exe_reg_rf_wen === REN_S) && (id_rs2_addr_b =/= 0.U) && (id_rs2_addr_b === exe_reg_wb_addr)
   stall_flg := (id_rs1_data_hazard || id_rs2_data_hazard)
 
   // branch,jump,stall時にIDをBUBBLE化
+  // BUBBLE ID when branch, jump, stall
   val id_inst = Mux((exe_br_flg || exe_jmp_flg || stall_flg), BUBBLE, id_reg_inst)  
 
   val id_rs1_addr = id_inst(19, 15)
@@ -314,22 +319,25 @@ class Core extends Module {
 
   //**********************************
   // IO & Debug
+  val counter = RegInit(0.U(WORD_LEN.W));
+  counter := counter + 1.U;
+  printf(p"[cycle] $counter -> ")
   io.gp := regfile(3)
   //io.exit := (mem_reg_pc === 0x44.U(WORD_LEN.W))
   io.exit := (id_reg_inst === UNIMP)
-  printf(p"if_reg_pc        : 0x${Hexadecimal(if_reg_pc)}\n")
-  printf(p"id_reg_pc        : 0x${Hexadecimal(id_reg_pc)}\n")
-  printf(p"id_reg_inst      : 0x${Hexadecimal(id_reg_inst)}\n")
-  printf(p"stall_flg        : 0x${Hexadecimal(stall_flg)}\n")
-  printf(p"id_inst          : 0x${Hexadecimal(id_inst)}\n")
-  printf(p"id_rs1_data      : 0x${Hexadecimal(id_rs1_data)}\n")
-  printf(p"id_rs2_data      : 0x${Hexadecimal(id_rs2_data)}\n")
-  printf(p"exe_reg_pc       : 0x${Hexadecimal(exe_reg_pc)}\n")
-  printf(p"exe_reg_op1_data : 0x${Hexadecimal(exe_reg_op1_data)}\n")
-  printf(p"exe_reg_op2_data : 0x${Hexadecimal(exe_reg_op2_data)}\n")
-  printf(p"exe_alu_out      : 0x${Hexadecimal(exe_alu_out)}\n")
-  printf(p"mem_reg_pc       : 0x${Hexadecimal(mem_reg_pc)}\n")
-  printf(p"mem_wb_data      : 0x${Hexadecimal(mem_wb_data)}\n")
-  printf(p"wb_reg_wb_data   : 0x${Hexadecimal(wb_reg_wb_data)}\n")
+  printf(p"[if_reg_pc        ]: 0x ${Hexadecimal(if_reg_pc)} --> ")
+  printf(p"[id_reg_pc        ]: 0x ${Hexadecimal(id_reg_pc)} --> ")
+  printf(p"[id_reg_inst      ]: 0x ${Hexadecimal(id_reg_inst)} --> ")
+  printf(p"[stall_flg        ]: 0x ${Hexadecimal(stall_flg)} --> ")
+  printf(p"[id_inst          ]: 0x ${Hexadecimal(id_inst)} --> ")
+  printf(p"[id_rs1_data      ]: 0x ${Hexadecimal(id_rs1_data)} --> ")
+  printf(p"[id_rs2_data      ]: 0x ${Hexadecimal(id_rs2_data)} --> ")
+  printf(p"[exe_reg_pc       ]: 0x ${Hexadecimal(exe_reg_pc)} --> ")
+  printf(p"[exe_reg_op1_data ]: 0x ${Hexadecimal(exe_reg_op1_data)} --> ")
+  printf(p"[exe_reg_op2_data ]: 0x ${Hexadecimal(exe_reg_op2_data)} --> ")
+  printf(p"[exe_alu_out      ]: 0x ${Hexadecimal(exe_alu_out)} --> ")
+  printf(p"[mem_reg_pc       ]: 0x ${Hexadecimal(mem_reg_pc)} --> ")
+  printf(p"[mem_wb_data      ]: 0x ${Hexadecimal(mem_wb_data)} --> ")
+  printf(p"[wb_reg_wb_data   ]: 0x ${Hexadecimal(wb_reg_wb_data)} --> ")
   printf("---------\n")
 }
