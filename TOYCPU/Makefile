@@ -10,7 +10,8 @@ APPFILE=
 	cd src/c/ && make $(APPFILE)
 
 2run:
-	./obj_dir/VTop ./src/hex/$(APPFILE).hex 
+	#./obj_dir/VTop ./src/hex/$(APPFILE).hex 
+	./obj_dir/VTop $(APPFILE)
 
 clean:
 	rm *.v *.json *.fir *.f

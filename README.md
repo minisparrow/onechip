@@ -21,7 +21,7 @@ sbt testOnly packageName.testClassName
 for example: 
 
 ```
-sbt testOnly riscvtest.RiscvTest
+sbt "testOnly riscvtest.RiscvTest"
 
 ```
 
@@ -30,6 +30,7 @@ sbt testOnly riscvtest.RiscvTest
 ```
 make 0rvcpu
 make 1binary APPFILE=add
-make 2run APPFILE=src/riscv/rv32ui-p-sw.he
-make 2run APPFILE=src/hex/add.hex
+make 2run APPFILE=src/riscv/rv32ui-p-sw.hex -> this will read error 
+make 2run APPFILE=src/c/binary
+make 2run APPFILE="bin file not hex file"
 ```

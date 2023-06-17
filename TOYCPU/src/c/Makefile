@@ -6,7 +6,7 @@
 	riscv64-linux-gnu-objdump -b elf64-littleriscv -D $@ > ../dump/$@.elf.dmp
 	rm -f $@.o
 	rm -f $@
-	rm -f $@.bin
+	# rm -f $@.bin
 
 clean:
 	rm *.o *.bin
