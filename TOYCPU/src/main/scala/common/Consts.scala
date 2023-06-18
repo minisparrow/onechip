@@ -60,8 +60,8 @@ object Consts {
 
   val REN_LEN = 2
   val REN_X   = 0.U(REN_LEN.W)
-  val REN_S   = 1.U(REN_LEN.W) // スカラ命令用
-  val REN_V   = 2.U(REN_LEN.W) // ベクトル命令用
+  val REN_S   = 1.U(REN_LEN.W) // For Scalar instructions
+  val REN_V   = 2.U(REN_LEN.W) // For Vector instructions
 
   val WB_SEL_LEN = 3
   val WB_X       = 0.U(WB_SEL_LEN.W)
