@@ -4,6 +4,7 @@ import chisel3._
 
 object Consts {
   val WORD_LEN      = 32
+  val BYTE_LEN      = 8
   val START_ADDR    = 0.U(WORD_LEN.W)
   val BUBBLE        = 0x00000013.U(WORD_LEN.W)  // [ADDI x0,x0,0] = BUBBLE
   val UNIMP         = "x_c0001073".U(WORD_LEN.W) // [CSRRW x0, cycle, x0]
@@ -38,6 +39,7 @@ object Consts {
   val ALU_VADDVV  = 19.U(EXE_FUN_LEN.W)
   val VSET        = 20.U(EXE_FUN_LEN.W)
   val ALU_PCNT    = 21.U(EXE_FUN_LEN.W)
+  val ALU_MMA     = 22.U(EXE_FUN_LEN.W)
 
   val OP1_LEN = 2
   val OP1_RS1 = 0.U(OP1_LEN.W)
@@ -55,13 +57,15 @@ object Consts {
 
   val MEN_LEN = 2
   val MEN_X   = 0.U(MEN_LEN.W)
-  val MEN_S   = 1.U(MEN_LEN.W) // スカラ命令用
-  val MEN_V   = 2.U(MEN_LEN.W) // ベクトル命令用
+  val MEN_S   = 1.U(MEN_LEN.W) // scalar 
+  val MEN_V   = 2.U(MEN_LEN.W) // Vector 
+  val MEN_T   = 3.U(MEN_LEN.W) // Tensor
 
   val REN_LEN = 2
   val REN_X   = 0.U(REN_LEN.W)
   val REN_S   = 1.U(REN_LEN.W) // For Scalar instructions
   val REN_V   = 2.U(REN_LEN.W) // For Vector instructions
+  val REN_T   = 3.U(REN_LEN.W) // For Tensor instructions
 
   val WB_SEL_LEN = 3
   val WB_X       = 0.U(WB_SEL_LEN.W)
