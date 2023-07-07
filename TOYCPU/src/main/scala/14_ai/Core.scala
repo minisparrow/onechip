@@ -10,14 +10,12 @@ class Core extends Module {
     new Bundle {
       val imem = Flipped(new ImemPortIo())
       val dmem = Flipped(new DmemPortIo())
-      // val amem = Flipped(new AmemPortIo())
-      // val bmem = Flipped(new BmemPortIo())
-      // val cmem = Flipped(new CmemPortIo())
       val exit = Output(Bool())
     }
   )
 
   val regfile = Mem(32, UInt(WORD_LEN.W))
+  val vec_regfile = Mem(32, UInt(VLEN.W))
   val csr_regfile = Mem(4096, UInt(WORD_LEN.W)) 
   
 
@@ -30,14 +28,21 @@ class Core extends Module {
   val pc_plus4 = pc_reg + 4.U(WORD_LEN.W)
   val br_target = Wire(UInt(WORD_LEN.W))
   val br_flg = Wire(Bool())
+  val jmp_flg = (inst === JAL || inst === JALR)
   val alu_out = Wire(UInt(WORD_LEN.W))
-  val mma_start = Wire(Bool());
-  val mma_trigger = RegInit(0.B)
+  val ld_vector = Wire(Bool())
+  val alu_mma = Wire(Bool())
+  val mma_done = Wire(Bool())
+  val mma_status = Wire(Bool())
+  val mma_working = RegInit(0.B)
+  mma_status := alu_mma & ~(mma_done);
 
   val pc_next = MuxCase(pc_plus4, Seq(
     br_flg -> br_target,
-    mma_trigger -> pc_reg, 
-    (inst === JAL || inst === JALR) -> alu_out,
+    // mma_working -> pc_reg, 
+    // alu_mma -> pc_reg, 
+    mma_status -> pc_reg, 
+    jmp_flg -> alu_out,
     (inst === ECALL) -> csr_regfile(0x305) // go to trap_vector
   ))
   pc_reg := pc_next
@@ -66,7 +71,7 @@ class Core extends Module {
   val imm_z_uext = Cat(Fill(27, 0.U), imm_z)
 
   val csignals = ListLookup(inst,
-               List(ALU_X    , OP1_RS1, OP2_RS2, MEN_X, REN_X, WB_X  , CSR_X),
+               List(ALU_X  , OP1_RS1, OP2_RS2, MEN_X, REN_X, WB_X  , CSR_X),
     Array(
       LW    -> List(ALU_ADD  , OP1_RS1, OP2_IMI, MEN_X, REN_S, WB_MEM, CSR_X),
       SW    -> List(ALU_ADD  , OP1_RS1, OP2_IMS, MEN_S, REN_X, WB_X  , CSR_X),
@@ -110,9 +115,14 @@ class Core extends Module {
       LDBBUF-> List(ALU_X    , OP1_X  , OP2_X  , MEN_T, REN_T, WB_X  , CSR_X),
       MMA   -> List(ALU_MMA  , OP1_X  , OP2_X  , MEN_T, REN_T, WB_X  , CSR_X),
       STBUF -> List(ALU_X    , OP1_X  , OP2_X  , MEN_T, REN_T, WB_X  , CSR_X),
+      VSETVLI -> List(ALU_X     , OP1_X  , OP2_X  , MEN_X, REN_S, WB_VL   , CSR_V),
+      VLE     -> List(ALU_COPY1 , OP1_RS1, OP2_X  , MEN_X, REN_V, WB_MEM_V, CSR_X),
+      VADDVV  -> List(ALU_VADDVV, OP1_X  , OP2_X  , MEN_X, REN_V, WB_ALU_V, CSR_X),
+      VSE     -> List(ALU_COPY1 , OP1_RS1, OP2_X  , MEN_V, REN_X, WB_X    , CSR_X),
 		)
 	)
   val exe_fun :: op1_sel :: op2_sel :: mem_wen :: rf_wen :: wb_sel :: csr_cmd :: Nil = csignals
+  ld_vector := exe_fun === ALU_COPY1 && rf_wen === REN_V
 
   val op1_data = MuxCase(0.U(WORD_LEN.W), Seq(
     (op1_sel === OP1_RS1) -> rs1_data,
@@ -128,6 +138,10 @@ class Core extends Module {
     (op2_sel === OP2_IMU) -> imm_u_shifted
   ))
 
+  val vs1_data = Cat(Seq.tabulate(8)(n => vec_regfile(rs1_addr + n.U)).reverse)
+  val vs2_data = Cat(Seq.tabulate(8)(n => vec_regfile(rs2_addr + n.U)).reverse)
+  val vs3_data = Cat(Seq.tabulate(8)(n => vec_regfile(wb_addr  + n.U)).reverse)
+  val valid = Wire(Bool())
 
   //**********************************
   // Execute (EX) Stage
@@ -148,6 +162,7 @@ class Core extends Module {
   ))
 
   // branch
+  br_target := pc_reg + imm_b_sext
   br_flg := MuxCase(false.B, Seq(
     (exe_fun === BR_BEQ)  ->  (op1_data === op2_data),
     (exe_fun === BR_BNE)  -> !(op1_data === op2_data),
@@ -156,7 +171,25 @@ class Core extends Module {
     (exe_fun === BR_BLTU) ->  (op1_data < op2_data),
     (exe_fun === BR_BGEU) -> !(op1_data < op2_data)
   ))
-  br_target := pc_reg + imm_b_sext
+
+  // vector
+  val csr_vsew = csr_regfile(VTYPE_ADDR)(4,2)
+  val csr_sew  = (1.U(1.W) << (csr_vsew + 3.U(3.W))).asUInt()
+  val vaddvv   = WireDefault(0.U((VLEN*8).W))
+
+  for(vsew <- 0 to 7){
+    var sew = 1 << (vsew + 3)
+    var num = VLEN*8 / sew //vsew32ならnum=4*8, vsew16ならnum=8*8
+    when(csr_sew === sew.U){
+      vaddvv := Cat(Seq.tabulate(num)(
+        n => (vs1_data(sew * (n+1) - 1, sew * n) + vs2_data(sew * (n+1) - 1, sew * n))
+      ).reverse)
+    }
+  }
+
+  val v_alu_out = MuxCase(0.U((VLEN*8).W), Seq(
+    (exe_fun === ALU_VADDVV) -> vaddvv
+  ))
 
 
   //**********************************
@@ -165,6 +198,11 @@ class Core extends Module {
   io.dmem.addr  := alu_out
   io.dmem.wen   := mem_wen
   io.dmem.wdata := rs2_data
+  io.dmem.vwdata := vs3_data
+
+  val csr_vl   = csr_regfile(VL_ADDR)
+  val data_len = csr_sew * csr_vl
+  io.dmem.data_len := data_len
 
   // CSR
   val csr_addr = Mux(csr_cmd === CSR_E, 0x342.U(CSR_ADDR_LEN.W), inst(31,20))
@@ -180,46 +218,72 @@ class Core extends Module {
     csr_regfile(csr_addr) := csr_wdata
   }
 
+  // VSETVLI
+  val vtype = imm_i_sext
+  val vsew  = vtype(4,2)
+  val vlmul = vtype(1,0)
+  val vlmax = ((VLEN.U << vlmul) >> (vsew + 3.U(3.W))).asUInt()
+  val avl   = rs1_data
+  
+  val vl = MuxCase(0.U(WORD_LEN.W), Seq(
+    (avl <= vlmax) -> avl,
+    (avl > vlmax)  -> vlmax
+  ))
+
+  when(csr_cmd === CSR_V){
+    csr_regfile(VL_ADDR)    := vl
+    csr_regfile(VTYPE_ADDR) := vtype
+  }
   // ai accelerator 
-  mma_start := Mux(exe_fun === ALU_MMA, 1.U, 0.U);
-  printf(p"mma_start : $mma_start\n")
+  alu_mma := Mux(exe_fun === ALU_MMA, 1.U, 0.U);
+  // when(mma_done) {
+  //   alu_mma := false.B
+  // }.elsewhen(exe_fun === ALU_MMA) {
+  //   alu_mma := true.B
+  // }
+  printf(p"alu_mma : $alu_mma\n")
 
   val vecA = RegInit(VecInit(Range(1, 17).map(_.U(8.W))))
   val vecB = RegInit(VecInit(Range(1, 17).map(_.U(8.W))))
   val vecC = RegInit(VecInit(Seq.fill(16)(0.U(32.W))))
-  val vecD = RegInit(VecInit(Seq.fill(16)(0.U(32.W))))
-  val mma_done = Wire(Bool())
+  val vecD = Wire(Vec(16, UInt(32.W)))
+  val a = vs1_data(128*8-1,128*7)
+  val b = vs2_data(128*8-1,128*7)
 
-  when(mma_start) {
-    mma_trigger := 1.B;
+  vecA := a.asTypeOf(vecA)
+  vecB := b.asTypeOf(vecA)
+
+  val result = RegInit(VecInit(Seq.fill(16)(0.U(32.W))))
+  when(valid) {
+    result := vecD
+  }.otherwise {
+    result := result
   }
+
+  // when(alu_mma) {
+  //   mma_working := 1.B
+  // }
   val GEMM = Module(new Multiplier(4, 4, 4))
-  GEMM.io.mma_start := mma_trigger
+  GEMM.io.mma_working := mma_status 
   GEMM.io.vecA := vecA
   GEMM.io.vecB := vecB
   GEMM.io.vecC := vecC
   vecD := GEMM.io.vecD
+  valid := GEMM.io.valid
   mma_done := GEMM.io.mma_done
 
   def fallingedge(x: Bool) = !x && RegNext(x)
-  val done = fallingedge(mma_trigger)
+  val done = fallingedge(mma_working)
 
-  val Counter = RegInit(0.U(5.W))
-  when(mma_trigger) {
-    when (mma_done) {
-       Counter := Counter
-       mma_trigger := false.B
-    }.otherwise {
-       Counter := Counter + 1.U
-    }
-  }
+  // when(mma_working) {
+  //   when (mma_done) {
+  //      mma_working := false.B
+  //   }
+  // }
 
-  when(mma_done) {
+  when(valid) {
     for(i <- 0 until 16) {
-      printf(p"A: ${vecA(i)}\n")
-      printf(p"B: ${vecB(i)}\n")
-      printf(p"C: ${vecC(i)}\n")
-      printf(p"D: ${vecD(i)}\n")
+       printf(p"D: ${vecD(i)}\n")
     }
   }
 
@@ -228,12 +292,30 @@ class Core extends Module {
   
   val wb_data = MuxCase(alu_out, Seq(
     (wb_sel === WB_MEM) -> io.dmem.rdata,
-    (wb_sel === WB_PC)  -> pc_plus4,
-    (wb_sel === WB_CSR) -> csr_rdata
+    (wb_sel === WB_PC) -> pc_plus4,
+    (wb_sel === WB_CSR) -> csr_rdata,
+    (wb_sel === WB_VL ) -> vl
   ))
+  val v_wb_data = Mux(wb_sel === WB_MEM_V, io.dmem.vrdata, v_alu_out)
 
   when(rf_wen === REN_S) {
     regfile(wb_addr) := wb_data
+  }.elsewhen(rf_wen === REN_V) {
+    val last_reg_id = data_len / VLEN.U
+
+    for(reg_id <- 0 to 7){
+      when(reg_id.U < last_reg_id){
+        vec_regfile(wb_addr + reg_id.U) := v_wb_data(VLEN*(reg_id+1)-1, VLEN*reg_id)
+      }.elsewhen(reg_id.U === last_reg_id){
+        val remainder               = data_len % VLEN.U
+        val tail_width              = VLEN.U - remainder
+        val org_reg_data            = vec_regfile(wb_addr + reg_id.U)
+        val tail_reg_data           = ((org_reg_data >> remainder) << remainder)(VLEN-1, 0)
+        val effective_v_wb_data     = ((v_wb_data(VLEN*(reg_id+1)-1, VLEN*reg_id) << tail_width)(VLEN-1, 0) >> tail_width).asUInt()
+        val undisturbed_v_wb_data   = tail_reg_data | effective_v_wb_data
+        vec_regfile(wb_addr + reg_id.U) := undisturbed_v_wb_data
+      }
+    }
   }
 
 
@@ -251,5 +333,15 @@ class Core extends Module {
   printf(p"wb_data    : 0x${Hexadecimal(wb_data)}\n")
   printf(p"dmem.addr  : ${io.dmem.addr}\n")
   printf(p"dmem.rdata : ${io.dmem.rdata}\n")
+  printf(p"dmem.vrdata      : 0x${Hexadecimal(io.dmem.vrdata)}\n")
+  printf(p"vec_regfile(1.U) : 0x${Hexadecimal(vec_regfile(1.U))}\n")
+  printf(p"vec_regfile(2.U) : 0x${Hexadecimal(vec_regfile(2.U))}\n")
+  printf(p"vec_regfile(3.U) : 0x${Hexadecimal(vec_regfile(3.U))}\n")
+  printf(p"vec_regfile(4.U) : 0x${Hexadecimal(vec_regfile(4.U))}\n")
+  printf(p"vec_regfile(5.U) : 0x${Hexadecimal(vec_regfile(5.U))}\n")
+  printf(p"vec_regfile(6.U) : 0x${Hexadecimal(vec_regfile(6.U))}\n")
+  printf(p"vec_regfile(7.U) : 0x${Hexadecimal(vec_regfile(7.U))}\n")
+  printf(p"vec_regfile(8.U) : 0x${Hexadecimal(vec_regfile(8.U))}\n")
+  printf(p"vec_regfile(9.U) : 0x${Hexadecimal(vec_regfile(9.U))}\n")
   printf("---------\n")
 }

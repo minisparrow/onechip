@@ -13,78 +13,47 @@ class ImemPortIo extends Bundle {
 class DmemPortIo extends Bundle {
   val addr  = Input(UInt(WORD_LEN.W))
   val rdata = Output(UInt(WORD_LEN.W))
-  val wen   = Input(Bool())
+  val wen      = Input(UInt(MEN_LEN.W))
   val wdata = Input(UInt(WORD_LEN.W))
-}
-
-class AmemPortIo extends Bundle {
-  val addr  = Input(UInt(WORD_LEN.W))
-  val rdata = Output(UInt(BYTE_LEN.W))
-  val wen   = Input(Bool())
-  val wdata = Input(UInt(BYTE_LEN.W))
-}
-
-class BmemPortIo extends Bundle {
-  val addr  = Input(UInt(WORD_LEN.W))
-  val rdata = Output(UInt(BYTE_LEN.W))
-  val wen   = Input(Bool())
-  val wdata = Input(UInt(BYTE_LEN.W))
-}
-
-class CmemPortIo extends Bundle {
-  val addr  = Input(UInt(WORD_LEN.W))
-  val rdata = Output(UInt(WORD_LEN.W))
-  val wen   = Input(Bool())
-  val wdata = Input(UInt(WORD_LEN.W))
+  val vrdata   = Output(UInt((VLEN*8).W))
+  val vwdata   = Input(UInt((VLEN*8).W))
+  val data_len = Input(UInt(WORD_LEN.W))
 }
 
 class Memory extends Module {
   val io = IO(new Bundle {
     val imem = new ImemPortIo()
     val dmem = new DmemPortIo()
-    // val amem = new AmemPortIo()
-    // val bmem = new BmemPortIo()
-    // val cmem = new CmemPortIo()
   })
 
-  val mem  = SyncReadMem(4096, UInt(8.W))  
-  // val abuf = SyncReadMem(64, UInt(8.W)) // 512 x 8
-  // val bbuf = SyncReadMem(64, UInt(8.W))
-  // val cbuf = SyncReadMem(64, UInt(32.W))
-
-  // loadMemoryFromFile(abuf, "src/hex/abuf.hex")
-  // loadMemoryFromFile(bbuf, "src/hex/bbuf.hex")
-  // loadMemoryFromFile(cbuf, "src/hex/cbuf.hex")
-  loadMemoryFromFile(mem, "src/hex/ai.hex")
+  val mem = Mem(16384, UInt(8.W))
+  // loadMemoryFromFile(mem, "src/hex/ai.hex")
+  loadMemoryFromFile(mem, "src/hex/vse32_m2.hex")
   io.imem.inst := Cat(
     mem(io.imem.addr + 3.U(WORD_LEN.W)), 
     mem(io.imem.addr + 2.U(WORD_LEN.W)),
     mem(io.imem.addr + 1.U(WORD_LEN.W)),
     mem(io.imem.addr)
   )
-  io.dmem.rdata := Cat(
-    mem(io.dmem.addr + 3.U(WORD_LEN.W)),
-    mem(io.dmem.addr + 2.U(WORD_LEN.W)), 
-    mem(io.dmem.addr + 1.U(WORD_LEN.W)),
-    mem(io.dmem.addr)
-  )
-  when(io.dmem.wen){
-    mem(io.dmem.addr)                   := io.dmem.wdata( 7,  0)
-    mem(io.dmem.addr + 1.U(WORD_LEN.W)) := io.dmem.wdata(15,  8)
-    mem(io.dmem.addr + 2.U(WORD_LEN.W)) := io.dmem.wdata(23, 16)
-    mem(io.dmem.addr + 3.U(WORD_LEN.W)) := io.dmem.wdata(31, 24)
-  }
 
-  // io.amem.rdata := abuf(io.amem.addr)
-  // io.bmem.rdata := bbuf(io.bmem.addr)
-  // io.cmem.rdata := cbuf(io.cmem.addr)
-  // when(io.amem.wen){
-  //   abuf(io.amem.addr) := io.amem.wdata
-  // }
-  // when(io.bmem.wen){
-  //   bbuf(io.bmem.addr) := io.bmem.wdata
-  // }
-  // when(io.cmem.wen){
-  //   cbuf(io.cmem.addr) := io.cmem.wdata
-  // }
+  def readData(len: Int) = Cat(Seq.tabulate(len / 8)(n => mem(io.dmem.addr + n.U(WORD_LEN.W))).reverse)
+  io.dmem.rdata  := readData(WORD_LEN)
+  io.dmem.vrdata := readData(VLEN*8)
+
+  switch(io.dmem.wen){
+    is(MEN_S){
+      mem(io.dmem.addr)       := io.dmem.wdata( 7, 0)
+      mem(io.dmem.addr + 1.U) := io.dmem.wdata(15, 8)
+      mem(io.dmem.addr + 2.U) := io.dmem.wdata(23,16)
+      mem(io.dmem.addr + 3.U) := io.dmem.wdata(31,24)
+    }
+    is(MEN_V){
+      val data_len_byte = io.dmem.data_len / 8.U
+      for(i <- 0 to VLEN - 1){ // 最大[VLEN*8]bit = VLEN byte
+        when(i.U < data_len_byte){
+          mem(io.dmem.addr + i.U) := io.dmem.vwdata(8*(i+1)-1, 8*i)
+        }
+      }
+    }
+  }
 }

@@ -4,7 +4,7 @@ import chisel3._
 import chisel3.util._
 import common.Instructions._
 import common.Consts._
-  
+
 class Core extends Module {
   val io = IO(
     new Bundle {
@@ -34,7 +34,7 @@ class Core extends Module {
   val alu_out = Wire(UInt(WORD_LEN.W))
   
   val pc_next = MuxCase(pc_plus4, Seq(
-    br_flg  -> br_target,
+    br_flg -> br_target,
     jmp_flg -> alu_out,
     (inst === ECALL) -> csr_regfile(0x305) // go to trap_vector
   ))
@@ -64,7 +64,7 @@ class Core extends Module {
   val imm_z_uext = Cat(Fill(27, 0.U), imm_z)
 
   val csignals = ListLookup(inst,
-               List(ALU_X       , OP1_RS1, OP2_RS2, MEN_X, REN_X, WB_X    , CSR_X),
+               List(ALU_X   , OP1_RS1, OP2_RS2, MEN_X, REN_X, WB_X    , CSR_X),
     Array(
       LW      -> List(ALU_ADD   , OP1_RS1, OP2_IMI, MEN_X, REN_S, WB_MEM  , CSR_X),
       SW      -> List(ALU_ADD   , OP1_RS1, OP2_IMS, MEN_S, REN_X, WB_X    , CSR_X),
@@ -130,7 +130,6 @@ class Core extends Module {
   val vs2_data = Cat(Seq.tabulate(8)(n => vec_regfile(rs2_addr + n.U)).reverse)
   val vs3_data = Cat(Seq.tabulate(8)(n => vec_regfile(wb_addr  + n.U)).reverse)
 
-
   //**********************************
   // Execute (EX) Stage
 
@@ -183,9 +182,9 @@ class Core extends Module {
   //**********************************
   // Memory Access Stage
 
-  io.dmem.addr   := alu_out
-  io.dmem.wen    := mem_wen
-  io.dmem.wdata  := rs2_data
+  io.dmem.addr  := alu_out
+  io.dmem.wen   := mem_wen
+  io.dmem.wdata := rs2_data
   io.dmem.vwdata := vs3_data
 
   val csr_vl   = csr_regfile(VL_ADDR)
@@ -230,7 +229,7 @@ class Core extends Module {
   
   val wb_data = MuxCase(alu_out, Seq(
     (wb_sel === WB_MEM) -> io.dmem.rdata,
-    (wb_sel === WB_PC ) -> pc_plus4,
+    (wb_sel === WB_PC) -> pc_plus4,
     (wb_sel === WB_CSR) -> csr_rdata,
     (wb_sel === WB_VL ) -> vl
   ))
